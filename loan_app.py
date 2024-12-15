@@ -1,24 +1,33 @@
 from flask import Flask, request
-app = Flask(__name__)
 import pickle
-import sklearn
 
-with open('classifier.pkl', 'rb') as f:
-    model = pickle.load(f)
+# master variable - controls entire application
+app = Flask(__name__)
 
+# model loading
+model_file = open("classifier.pkl", "rb")
+model = pickle.load(model_file)
+
+# API endpoints
 @app.route('/')
 def home():
-    return '<h1> Loan Approval Application </h1>'
+    return "<h1>Loan Approval Application V2!!!</h1>"
 
-@app.route('/Predict', methods = ['GET', 'POST'])
+
+@app.route('/ping')
+def ping():
+    return {"message":"Hey there..."}
+
+
+@app.route('/predict', methods=['GET','POST'])
 def predict():
-    if request.method == 'GET':
-        return "I will make the Predictions "
+    if request.method == 'GET':        
+        return "I will make the predictions."
     else:
-        # post request along with data
-        # then i will make predictions
-
+        # post request along with the data
+        # then i will make the prediction.
         loan_req = request.get_json()
+        
         if loan_req['Gender'] == "Male":
             Gender = 0
         else:
@@ -43,3 +52,9 @@ def predict():
 
 
         return {"loan_approval_status":pred}
+    
+
+
+@app.route('/carprice')
+def ping():
+    return {"message":"This will predict the resale price of the car. "}
